@@ -6,10 +6,14 @@ class Track < ApplicationRecord
   scope :short, -> { shorter_than(SHORT) }
   scope :medium, -> { longer_or_equal_to(SHORT).shorter_than(LONG) }
   scope :long, -> { longer_or_equal_to(LONG) }
-  scope :starts_with, -> (char) { where('name ILIKE ?', "#{ char }%") }
+  scope :starts_with, -> (char) { where('name ILIKE ?', "#{char}%") }
 
   scope :shorter_than, -> (milliseconds) {
     where("milliseconds < ?", milliseconds) if milliseconds && milliseconds > 0
+  }
+
+  scope :longer_or_equal_to, -> (milliseconds) {
+    where("milliseconds > ?", milliseconds) if milliseconds && milliseconds > 0
   }
 
   # def self.short
@@ -32,13 +36,13 @@ class Track < ApplicationRecord
   #   end
   # end
 
-  def self.longer_or_equal_to(milliseconds)
-    if milliseconds && milliseconds > 0
-      where("milliseconds > ?", milliseconds)
-    else
-      all
-    end
-  end
+  # def self.longer_or_equal_to(milliseconds)
+  #   if milliseconds && milliseconds > 0
+  #     where("milliseconds > ?", milliseconds)
+  #   else
+  #     all
+  #   end
+  # end
 
   # def self.starts_with(char)
   #   where('name ILIKE ?', "#{ char }%")
